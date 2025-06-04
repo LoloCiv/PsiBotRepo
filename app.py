@@ -4,8 +4,7 @@ from evaluador import evaluar_mensaje
 from correo import enviar_alerta
 
 app = Flask(__name__)
-
-CORREO_ALERTA = "laureanocivetta@gmail.com"  # CAMBIAR
+CORREO_ALERTA = "laureanocivetta@gmail.com"
 
 @app.route("/")
 def index():
