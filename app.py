@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, jsonify
 from modelo import generar_respuesta
 from evaluador import evaluar_mensaje
@@ -19,3 +20,8 @@ def chat():
         return jsonify({"respuesta": "Detecté un mensaje que podría ser peligroso. Te recomiendo buscar ayuda profesional."})
     respuesta = generar_respuesta(mensaje_usuario)
     return jsonify({"respuesta": respuesta})
+
+if __name__ == "__main__":
+    # Cloud Run asigna el puerto via variable de entorno PORT, si no, usa 8080 por defecto
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
