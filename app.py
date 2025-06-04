@@ -5,7 +5,7 @@ from correo import enviar_alerta
 
 app = Flask(__name__)
 
-CORREO_ALERTA = "tucorreo@gmail.com"  # CAMBIAR
+CORREO_ALERTA = "laureanocivetta@gmail.com"  # CAMBIAR
 
 @app.route("/")
 def index():
