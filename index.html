@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chatbot LLaMA</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    #chat { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+    .mensaje { margin: 5px 0; }
+    .usuario { color: blue; }
+    .bot { color: green; }
+  </style>
+</head>
+<body>
+  <h1>Chatbot LLaMA</h1>
+  <div id="chat"></div>
+  <input type="text" id="input" placeholder="Escribí algo" />
+  <button onclick="enviar()">Enviar</button>
+
+  <script>
+    async function enviar() {
+      const input = document.getElementById('input');
+      const mensaje = input.value;
+      input.value = '';
+      const chat = document.getElementById('chat');
+      chat.innerHTML += `<div class='mensaje usuario'><b>Vos:</b> ${mensaje}</div>`;
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({mensaje})
+      });
+      const data = await res.json();
+      chat.innerHTML += `<div class='mensaje bot'><b>LLaMA:</b> ${data.respuesta}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>
