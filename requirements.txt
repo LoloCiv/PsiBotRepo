@@ -1,0 +1,6 @@
+Flask
+gunicorn
+transformers
+sentence-transformers
+torch
+bitsandbytes
