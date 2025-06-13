@@ -2,7 +2,7 @@ from sentence_transformers import SentenceTransformer, util
 
 modelo_semantico = SentenceTransformer('all-MiniLM-L6-v2')
 
-mensajes_ingles = [
+mensajes_riesgosos = [
     "I want to die",
     "I want to kill myself",
     "I don't feel like living",
