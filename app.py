@@ -1,4 +1,3 @@
-!pip install flask pyngrok
 
 from flask import Flask, render_template, request, jsonify
 from pyngrok import ngrok
