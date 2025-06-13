@@ -22,7 +22,7 @@ def generar_respuesta(prompt):
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(device)
     output = model.generate(
         **inputs,
-        max_new_tokens=200,
+        max_new_tokens=500,  
         pad_token_id=tokenizer.eos_token_id,
         do_sample=True,
         temperature=0.7,
