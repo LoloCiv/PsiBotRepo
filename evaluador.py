@@ -2,16 +2,15 @@ from sentence_transformers import SentenceTransformer, util
 
 modelo_semantico = SentenceTransformer('all-MiniLM-L6-v2')
 
-mensajes_riesgosos = [
-    "me quiero morir",
-    "quiero matarme",
-    "no tengo ganas de vivir",
-    "estoy pensando en suicidarme",
-    "voy a hacerle daño a alguien",
-    "me odio",
-    "todo es una mierda"
+mensajes_ingles = [
+    "I want to die",
+    "I want to kill myself",
+    "I don't feel like living",
+    "I'm thinking about committing suicide",
+    "I'm going to hurt someone",
+    "I hate myself",
+    "Everything is shit"
 ]
-
 emb_riesgo = modelo_semantico.encode(mensajes_riesgosos, convert_to_tensor=True)
 
 THRESHOLD = 0.6
