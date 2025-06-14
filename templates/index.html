@@ -1,41 +1,156 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html> 
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chatbot LLaMA Terapéutico</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <title>Chatbot LLaMA</title>
+  <style>
+    /* --- Estilos Generales y del Cuerpo --- */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh; /* Ocupa el 100% de la altura de la ventana */
+      background-color: #f0f2f5; /* Color de fondo tipo WhatsApp */
+    }
+
+    /* --- Contenedor Principal del Chat --- */
+    .chat-container {
+      width: 100%;
+      max-width: 600px; /* Ancho máximo para el chat */
+      height: 90vh; /* Ocupa el 90% de la altura de la ventana */
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden; /* Oculta el contenido que se desborda */
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Sombra sutil */
+      background-color: #fff; /* Fondo blanco para el contenedor */
+    }
+
+    /* --- Encabezado del Chat --- */
+    .chat-header {
+      background-color: #075e54; /* Verde oscuro de WhatsApp para el encabezado */
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    /* --- Área de Mensajes del Chat --- */
+    #chat {
+      flex-grow: 1; /* Permite que ocupe todo el espacio vertical disponible */
+      padding: 20px;
+      overflow-y: auto; /* Habilita el scroll vertical */
+      background-color: #e5ddd5; /* Fondo del chat tipo WhatsApp */
+      display: flex;
+      flex-direction: column; /* Apila los mensajes verticalmente */
+    }
+
+    /* --- Estilo Base de las Burbujas de Mensaje --- */
+    .mensaje {
+      max-width: 70%; /* Ancho máximo de la burbuja */
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      word-wrap: break-word; /* Asegura que las palabras largas se envuelvan */
+    }
+
+    /* --- Mensajes del Usuario (Enviados) --- */
+    .usuario {
+      background-color: #dcf8c6; /* Verde claro de WhatsApp para mensajes enviados */
+      align-self: flex-end; /* Alinea a la derecha */
+      margin-left: auto; /* Empuja el mensaje a la derecha */
+    }
+
+    /* --- Mensajes del Bot (Recibidos) --- */
+    .bot {
+      background-color: #fff; /* Blanco para mensajes recibidos */
+      align-self: flex-start; /* Alinea a la izquierda */
+      margin-right: auto; /* Empuja el mensaje a la izquierda */
+      box-shadow: 0 1px 0.5px rgba(0,0,0,0.13); /* Sombra sutil para mensajes recibidos */
+    }
+
+    /* --- Área de Entrada del Chat --- */
+    .chat-input-area {
+      display: flex; /* Contenedor flexible para el input y el botón */
+      padding: 10px;
+      background-color: #f0f0f0; /* Barra inferior gris claro */
+      border-top: 1px solid #eee;
+    }
+
+    #input {
+      flex-grow: 1; /* Permite que el input ocupe el espacio disponible */
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 20px; /* Forma de píldora para el input */
+      margin-right: 10px;
+      font-size: 1em;
+    }
+
+    button {
+      background-color: #128c7e; /* Verde de WhatsApp para el botón de enviar */
+      color: white;
+      border: none;
+      border-radius: 50%; /* Botón circular */
+      width: 45px;
+      height: 45px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.5em; /* Tamaño del icono */
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: background-color 0.2s; /* Transición suave al pasar el mouse */
+    }
+
+    button:hover {
+      background-color: #075e54; /* Verde más oscuro al pasar el mouse */
+    }
+  </style>
 </head>
 <body>
-  <div class="chat-container">
-    <header class="chat-header">
-      Chatbot LLaMA
-    </header>
+  <div class="chat-container">
+    <div class="chat-header">
+      Chatbot LLaMA
+    </div>
+    <div id="chat"></div>
+    <div class="chat-input-area">
+      <input type="text" id="input" placeholder="Escribe un mensaje..." />
+      <button onclick="enviar()">➤</button>     </div>
+  </div>
 
-    <main id="chat" class="chat-messages" aria-live="polite" aria-atomic="false"></main>
+  <script>
+    async function enviar() {
+      const input = document.getElementById('input');
+      const mensaje = input.value.trim(); // Elimina espacios en blanco al inicio y al final
+      if (mensaje === '') return; // No enviar mensajes vacíos
 
-    <div class="chat-input-area">
-      <input 
-        id="input" 
-        type="text" 
-        placeholder="Escribe un mensaje..." 
-        aria-label="Escribe un mensaje"
-        autocomplete="off"
-        autofocus
-      />
-      <button id="send-btn" aria-label="Enviar mensaje">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" width="24" height="24">
-          <path d="M2 21l21-9L2 3v7l15 2-15 2z"/>
-        </svg>
-      </button>
-    </div>
+      const chat = document.getElementById('chat');
+      // Añadir el mensaje del usuario sin "Vos:" ya que la burbuja lo representa
+      chat.innerHTML += <div class='mensaje usuario'>${mensaje}</div>;
 
-    <div id="alerta-riesgo" role="alert" aria-live="assertive" class="alerta-riesgo hidden">
-      ⚠️ Detecté un mensaje riesgoso. Por favor busca ayuda profesional.
-    </div>
-  </div>
+      input.value = ''; // Limpiar el input
+      chat.scrollTop = chat.scrollHeight; // Desplazarse al final inmediatamente
 
-  <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({mensaje})
+      });
+      const data = await res.json();
+      // Añadir la respuesta del bot sin "LLaMA:"
+      chat.innerHTML += <div class='mensaje bot'>${data.respuesta}</div>;
+      chat.scrollTop = chat.scrollHeight; // Desplazarse al final para ver la nueva respuesta
+    }
+
+    // Opcional: Enviar mensaje al presionar Enter
+    document.getElementById('input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        enviar();
+      }
+    });
+  </script>
 </body>
 </html>
-
