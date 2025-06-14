@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, jsonify
 from pyngrok import ngrok
 import threading
@@ -26,7 +25,7 @@ def chat():
         print(f"Error evaluando riesgo: {e}")
         riesgo = "normal"  
 
-    if riesgo == "riesgo":
+    if riesgo == "risk":
         threading.Thread(target=enviar_alerta, args=(CORREO_ALERTA, mensaje_usuario)).start()
         return jsonify({
             "respuesta": "Detecté un mensaje que podría ser peligroso. Te recomiendo buscar ayuda profesional."
