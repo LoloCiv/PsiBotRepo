@@ -20,19 +20,21 @@ def index():
 def chat():
     mensaje_usuario = request.json.get("mensaje", "")
 
-    # Evaluar si es un mensaje riesgoso
-    riesgo = evaluar_mensaje(mensaje_usuario)
+    try:
+        riesgo = evaluar_mensaje(mensaje_usuario)
+    except Exception as e:
+        print(f"Error evaluando riesgo: {e}")
+        riesgo = "normal"  
+
     if riesgo == "riesgo":
-        enviar_alerta(CORREO_ALERTA, mensaje_usuario)
+        threading.Thread(target=enviar_alerta, args=(CORREO_ALERTA, mensaje_usuario)).start()
         return jsonify({
             "respuesta": "Detecté un mensaje que podría ser peligroso. Te recomiendo buscar ayuda profesional."
         })
 
-    # Generar respuesta con historial y prompt especializado
     respuesta = generar_respuesta_con_contexto(mensaje_usuario)
     return jsonify({"respuesta": respuesta})
-
-# Ejecutar Flask en segundo plano
+    
 def run_app():
     app.run(port=8000)
 
