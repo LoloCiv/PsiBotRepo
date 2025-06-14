@@ -29,3 +29,15 @@ def generar_respuesta(prompt):
         top_p=0.9
     )
     return tokenizer.decode(output[0], skip_special_tokens=True)
+
+def generar_respuesta_clasificacion(prompt):
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(device)
+    output = model.generate(
+        **inputs,
+        max_new_tokens=10,  # no necesita muchos tokens
+        pad_token_id=tokenizer.eos_token_id,
+        do_sample=False,    # greedy para mayor consistencia
+        temperature=1.0,
+        top_p=1.0
+    )
+    return tokenizer.decode(output[0], skip_special_tokens=True)
