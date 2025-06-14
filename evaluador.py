@@ -1,18 +1,17 @@
-from modelo import generar_respuesta
-
-def evaluar_mensaje(mensaje_usuario):
+def evaluar_mensaje(mensaje):
     prompt = f"""
-You are an assistant trained to detect if a person's message represents a risk to their own life or others'.
-Your task is to analyze the following message and respond with only one word: RISK or NORMAL.
+    You are an assistant that detects only if a message indicates a risk of self-harm, suicide, or harming others.
+    Classify the following message as either "risk" or "normal". 
+    - "risk" means the message explicitly mentions suicide, killing, or self-harm intentions.
+    - "normal" means it does not.
 
-Message: "{mensaje_usuario}"
+    Message: "{mensaje}"
 
-Response:"""
+    Classification:"""
 
-    respuesta_cruda = generar_respuesta(prompt)
-    respuesta = respuesta_cruda.strip().upper()
-
-    if "RISK" in respuesta:
+    respuesta = generar_respuesta(prompt)
+    # Parsear respuesta para obtener la clasificación
+    if "risk" in respuesta.lower():
         return "risk"
     else:
         return "normal"
