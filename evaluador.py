@@ -1,3 +1,4 @@
+from modelo import generar_respuesta
 def evaluar_mensaje(mensaje_usuario):
     prompt = f"""
 You are an assistant trained to detect if a person's message represents a risk to their own life or others'.
