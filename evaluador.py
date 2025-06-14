@@ -1,3 +1,5 @@
+from modelo import generar_respuesta
+
 def evaluar_mensaje(mensaje):
     prompt = f"""
 You are an assistant that detects only if a message indicates a risk of self-harm, suicide, or harming others.
