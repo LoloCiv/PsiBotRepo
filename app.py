@@ -21,7 +21,7 @@ def chat():
         riesgo = evaluar_mensaje(mensaje_usuario)
     except Exception as e:
         print(f"Error evaluando riesgo: {e}")
-        riesgo = "normal"
+        riesgo = "safe"
 
     if riesgo == "risk":  # Ajusta esto según el output de tu evaluador
         threading.Thread(target=enviar_alerta, args=(CORREO_ALERTA, mensaje_usuario)).start()
