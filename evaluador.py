@@ -1,4 +1,3 @@
-
 from modelo import generar_respuesta_evaluador
 
 def evaluar_mensaje(mensaje):
@@ -8,9 +7,16 @@ def evaluar_mensaje(mensaje):
         f"Message: \"{mensaje}\"\n\n"
         "Response:"
     )
-    respuesta = generar_respuesta_evaluador(prompt)
-    respuesta_final = respuesta[len(prompt):].strip().lower()
 
-    if respuesta_final.startswith("risk"):
+    respuesta = generar_respuesta_evaluador(prompt)
+    print(f"\n--- DEBUG RESPUESTA COMPLETA ---\n{respuesta}\n------------------------")
+
+    # Intenta extraer solo la respuesta generada
+    respuesta_generada = respuesta.replace(prompt, "").strip().lower()
+    respuesta_generada = respuesta_generada.split()[0]  # solo la primera palabra
+
+    print(f"Evaluación extraída: {respuesta_generada}")
+
+    if "risk" in respuesta_generada:
         return "risk"
     return "safe"
