@@ -1,28 +1,23 @@
 from transformers import pipeline
 
-# USAMOS MODELO ENTRENADO PARA DETECCIÓN DE RIESGO SUICIDA
-clasificador = pipeline("text-classification", model="uw-hai/suicide-risk")
+def evaluar_riesgo(mensaje):
+    prompt = (
+        "You are a sensitive assistant that detects if a message contains suicidal thoughts, self-harm risk, or dangerous behavior.  \n"
+        "Respond only with 'risk' or 'safe'.\n\n"
+        f"Message: \"{mensaje}\"\n\n"
+        "Response:"
+    )
 
-# PALABRAS CLAVE PARA FILTRADO ADICIONAL (BACKUP)
-PALABRAS_CLAVE = [
-    "kill myself", "i want to kill", "cut", "cut myself", "suicide", "end my life",
-    "i want to die", "hurt myself", "hate myself", "no reason to live", "worthless",
-    "disappear", "give up"
-]
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(device)
+    output = model.generate(
+        **inputs,
+        max_new_tokens=10,
+        pad_token_id=tokenizer.eos_token_id,
+    )
+    respuesta = tokenizer.decode(output[0], skip_special_tokens=True)
+    respuesta_final = respuesta[len(prompt):].strip().lower()
 
-def evaluar_mensaje(mensaje):
-    lower_msg = mensaje.lower()
-
-    # FILTRO RÁPIDO POR PALABRAS CLAVE
-    if any(palabra in lower_msg for palabra in PALABRAS_CLAVE):
+    if respuesta_final.startswith("risk"):
         return "risk"
-
-    # EVALUACIÓN CON MODELO ESPECIALIZADO
-    resultado = clasificador(mensaje)[0]
-    label = resultado["label"].lower()
-    score = resultado["score"]
-
-    if label in ["suicide", "risk"] and score > 0.85:
-        return "risk"
-
-    return "safe"
+    else:
+        return "safe"
