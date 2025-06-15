@@ -9,7 +9,7 @@ def evaluar_mensaje(mensaje):
     )
 
     respuesta = generar_respuesta_evaluador(prompt)
-    print(f"\n--- DEBUG RESPUESTA COMPLETA ---\n{respuesta}\n------------------------")
+    print(f"\n--- DEBUG RESPUESTA COMPLETA ---\n{respuesta}\n------------------------",flush=True)
 
     # Intenta extraer solo la respuesta generada
     respuesta_generada = respuesta.replace(prompt, "").strip().lower()
