@@ -36,12 +36,25 @@ def generar_respuesta(prompt):
         return decoded.split("Assistant:")[-1].strip()
     else:
         return decoded.strip()
-
+""" 
 def generar_respuesta_evaluador(prompt):
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(device)
     output = model.generate(
         **inputs,
         max_new_tokens=10,
         pad_token_id=tokenizer.eos_token_id,
+    )
+    return tokenizer.decode(output[0], skip_special_tokens=True)
+"""
+
+def generar_respuesta_evaluador(prompt):
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024)  # sin .to(device)
+    output = model.generate(
+        **inputs,
+        max_new_tokens=5,
+        pad_token_id=tokenizer.eos_token_id,
+        do_sample=False,
+        num_beams=5,
+        early_stopping=True,
     )
     return tokenizer.decode(output[0], skip_special_tokens=True)
