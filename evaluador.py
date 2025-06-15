@@ -1,7 +1,7 @@
 
 from modelo import generar_respuesta_evaluador
 
-def evaluar_riesgo(mensaje):
+def evaluar_mensaje(mensaje):
     prompt = (
         "You are a sensitive assistant that detects if a message contains suicidal thoughts, self-harm risk, or dangerous behavior.\n"
         "Respond only with 'risk' or 'safe'.\n\n"
