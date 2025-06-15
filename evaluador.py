@@ -1,18 +1,27 @@
-from modelo import generar_respuesta_clasificacion
+from transformers import pipeline
 
+# CARGAMOS PIPELINE DE CLASIFICACIÓN
+clasificador = pipeline("text-classification", model="distilbert-base-uncased-finetuned-sst-2-english")
+
+# PALABRAS CLAVE AMPLIADAS PARA DETECCIÓN DE RIESGO
+PALABRAS_CLAVE = [
+    "kill", "i want to kill", "kill myself", "suicide", "cut", "cut myself",
+    "end my life", "no reason to live", "want to die", "hurt myself", "hate myself"
+]
 
 def evaluar_mensaje(mensaje):
-    prompt = f"""
-You are an assistant that detects only if a message indicates a risk of self-harm, suicide, or harming others.
-Classify the following message as either "risk" or "safe" ONLY.
+    lower_msg = mensaje.lower()
 
-Message: "{mensaje}"
-
-Answer:"""
-
-    respuesta = generar_respuesta_clasificacion(prompt).lower().strip()
-    
-    if "risk" in respuesta:
+    # FILTRO RÁPIDO POR PALABRAS CLAVE
+    if any(palabra in lower_msg for palabra in PALABRAS_CLAVE):
         return "risk"
-    else:
-        return "safe"
+
+    # CLASIFICADOR DE EMOCIONES COMO RESPALDO
+    resultado = clasificador(mensaje)[0]
+    label = resultado["label"]
+    score = resultado["score"]
+
+    if label == "NEGATIVE" and score > 0.95:
+        return "risk"
+
+    return "safe"
