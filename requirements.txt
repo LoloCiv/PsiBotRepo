@@ -4,4 +4,4 @@ transformers
 sentence-transformers
 torch
 bitsandbytes
-
+flask-ngrok
