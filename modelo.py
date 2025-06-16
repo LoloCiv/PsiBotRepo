@@ -41,18 +41,3 @@ def generar_respuesta(prompt):
         return decoded.split("Assistant:")[-1].strip()
     else:
         return decoded.strip()
-
-
-# === GENERAR RESPUESTA PARA EL EVALUADOR (más corto, más rápido) ===
-def generar_respuesta_evaluador(prompt):
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(model_device)
-
-    output = model.generate(
-        **inputs,
-        max_new_tokens=5,  # respuesta breve tipo "risk" o "safe"
-        pad_token_id=tokenizer.eos_token_id,
-        do_sample=False,
-        num_beams=5,
-        early_stopping=True,
-    )
-    return tokenizer.decode(output[0], skip_special_tokens=True)
