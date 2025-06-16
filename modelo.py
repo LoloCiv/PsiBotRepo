@@ -29,7 +29,7 @@ def generar_respuesta(prompt):
 
     output = model.generate(
         **inputs,
-        max_new_tokens=200,
+        max_new_tokens=300,
         pad_token_id=tokenizer.eos_token_id,
         do_sample=True,
         temperature=0.7,
