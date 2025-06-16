@@ -6,3 +6,4 @@ torch
 bitsandbytes
 flask-ngrok
 accelerate
+pyngrok
