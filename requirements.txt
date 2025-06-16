@@ -7,3 +7,5 @@ bitsandbytes
 flask-ngrok
 accelerate
 pyngrok
+torchvision 
+torchaudio
