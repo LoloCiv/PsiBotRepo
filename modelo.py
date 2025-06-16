@@ -19,8 +19,7 @@ model = AutoModelForCausalLM.from_pretrained(
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 def generar_respuesta(prompt):
-
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024)
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(model.device)
     
     output = model.generate(
         **inputs,
@@ -36,6 +35,7 @@ def generar_respuesta(prompt):
         return decoded.split("Assistant:")[-1].strip()
     else:
         return decoded.strip()
+
 """ 
 def generar_respuesta_evaluador(prompt):
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024).to(device)
