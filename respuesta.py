@@ -1,3 +1,4 @@
+import re
 from modelo import generar_respuesta
 
 conversation_history = []
@@ -27,7 +28,7 @@ def generar_respuesta_con_contexto(user_input):
 
     raw = generar_respuesta(full_prompt)
 
-    # Mismo control que tu código original
+    # Extraer la respuesta del modelo
     if "Assistant:" in raw:
         response = raw.split("Assistant:")[-1]
     else:
