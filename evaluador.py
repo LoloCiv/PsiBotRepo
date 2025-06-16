@@ -1,5 +1,11 @@
 import re
-from modelo import generar_respuesta_evaluador
+
+# Lista básica de palabras clave asociadas a riesgo
+PALABRAS_CLAVE_RIESGO = [
+    "suicide", "kill myself", "end it all", "die", "disappear", "worthless",
+    "hopeless", "no reason to live", "give up", "cut myself", "hurt myself",
+    "jump off", "overdose", "hang", "take my life","suicidal thoughts"
+]
 
 def clean_response(text):
     text = text.replace("</s>", "").strip()
@@ -7,22 +13,9 @@ def clean_response(text):
     return text.lower()
 
 def evaluar_mensaje(mensaje):
-    prompt = (
-        "You are a sensitive assistant that detects if a message contains suicidal thoughts, self-harm risk, or dangerous behavior.\n"
-        "Respond only with 'risk' or 'safe'.\n\n"
-        f"Message: \"{mensaje}\"\n\n"
-        "Response:"
-    )
-
-    respuesta = generar_respuesta_evaluador(prompt)
-    print(f"\n--- DEBUG RESPUESTA COMPLETA ---\n{respuesta}\n------------------------", flush=True)
-
-    # Extraer primera palabra (formato seguro)
-    respuesta_generada = clean_response(respuesta).split()[0]
-
-    print(f"Evaluación extraída: {respuesta_generada}")
-
-    if "risk" in respuesta_generada:
-        return "risk"
-
+    mensaje_clean = mensaje.lower()
+    for palabra in PALABRAS_CLAVE_RIESGO:
+        if palabra in mensaje_clean:
+            print(f"🔴 Palabra clave detectada: '{palabra}'")
+            return "risk"
     return "safe"
