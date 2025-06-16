@@ -20,7 +20,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 def generar_respuesta(prompt):
 
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=2048)
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=1024)
     
     output = model.generate(
         **inputs,
