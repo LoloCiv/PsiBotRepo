@@ -1,4 +1,10 @@
+import re
 from modelo import generar_respuesta_evaluador
+
+def clean_response(text):
+    text = text.replace("</s>", "").strip()
+    text = re.sub(r"\*[^*]+\*", "", text).strip()
+    return text.lower()
 
 def evaluar_mensaje(mensaje):
     prompt = (
@@ -9,14 +15,14 @@ def evaluar_mensaje(mensaje):
     )
 
     respuesta = generar_respuesta_evaluador(prompt)
-    print(f"\n--- DEBUG RESPUESTA COMPLETA ---\n{respuesta}\n------------------------",flush=True)
+    print(f"\n--- DEBUG RESPUESTA COMPLETA ---\n{respuesta}\n------------------------", flush=True)
 
-    # Intenta extraer solo la respuesta generada
-    respuesta_generada = respuesta.replace(prompt, "").strip().lower()
-    respuesta_generada = respuesta_generada.split()[0]  # solo la primera palabra
+    # Extraer primera palabra (formato seguro)
+    respuesta_generada = clean_response(respuesta).split()[0]
 
     print(f"Evaluación extraída: {respuesta_generada}")
 
     if "risk" in respuesta_generada:
         return "risk"
+
     return "safe"
