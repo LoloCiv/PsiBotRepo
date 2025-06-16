@@ -13,7 +13,7 @@ def clean_response(text):
 def build_context():
     return "\n".join(conversation_history[-10:])
 
-def chatbot_response(user_input):
+def generar_respuesta_con_contexto(user_input):
     conversation_history.append(f"User: {user_input}")
 
     system_prompt = (
