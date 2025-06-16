@@ -5,3 +5,4 @@ sentence-transformers
 torch
 bitsandbytes
 flask-ngrok
+accelerate
