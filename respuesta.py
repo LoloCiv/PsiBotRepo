@@ -12,7 +12,7 @@ def clean_response(text):
     return text
 
 def build_context():
-    return "\n".join(conversation_history[-10:])
+    return "\n".join(conversation_history[-4:])
 
 def generar_respuesta_con_contexto(user_input, riesgo="safe"):
     conversation_history.append(f"User: {user_input}")
