@@ -11,3 +11,4 @@ def enviar_alerta(correo_destino, mensaje_riesgoso):
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login("laureanocivetta@gmail.com", "otwn gqja hklb ngyc")  
         smtp.send_message(msg)
+        
