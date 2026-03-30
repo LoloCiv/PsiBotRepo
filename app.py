@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, jsonify
 from pyngrok import ngrok, conf
 import threading
@@ -6,11 +7,11 @@ from respuesta import generar_respuesta_con_contexto
 from evaluador import evaluar_mensaje
 from correo import enviar_alerta
 
-# ✅ Autenticación con Ngrok
-conf.get_default().auth_token = "2y3W36wyqQbDOUiz4H5tXPbVhhW_RkBGXd1iTFByQH5wQtx6"
+# Autenticación con Ngrok
+conf.get_default().auth_token = os.environ["NGROK_AUTH_TOKEN"]
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
-CORREO_ALERTA = "laureanocivetta@gmail.com"
+CORREO_ALERTA = os.environ["ALERT_EMAIL"]
 
 @app.route("/")
 def index():
